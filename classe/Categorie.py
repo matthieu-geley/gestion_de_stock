@@ -25,12 +25,12 @@ class CRUDcategorie:
 
 	def Update(self, nom, condition, nouveauNom):
 		cur = self.datab.cursor()
-		cur.execute(f"UPDATE categorie set {nom} = '{nouveauNom}' WHERE {condition};")
+		cur.execute(f"UPDATE categorie set {nom} = '{nouveauNom}' WHERE id = {condition};")
 		self.datab.commit()
 		cur.close()
 
 	def Delete(self, condition):
 		cur = self.datab.cursor()
-		cur.execute(f"DELETE FROM categorie WHERE {condition};")
+		cur.execute(f"DELETE FROM categorie WHERE id = {condition};")
 		self.datab.commit()
 		cur.close()

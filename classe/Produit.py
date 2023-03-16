@@ -25,12 +25,24 @@ class CRUDproduit:
 
 	def Update(self, nom, condition, nouveauNom):
 		cur = self.datab.cursor()
-		cur.execute(f"UPDATE produit set {nom} = '{nouveauNom}' WHERE {condition};")
+		cur.execute(f"UPDATE produit set {nom} = '{nouveauNom}' WHERE id = {condition};")
 		self.datab.commit()
 		cur.close()
 
 	def Delete(self, condition):
 		cur = self.datab.cursor()
-		cur.execute(f"DELETE FROM produit WHERE {condition};")
+		cur.execute(f"DELETE FROM produit WHERE id = {condition};")
 		self.datab.commit()
 		cur.close()
+
+
+#test des méthodes
+ar15 = CRUDproduit()
+
+#ar15.Create('AR-15', 'Replique longue', 350, 15, 2)
+
+#ar15.Update('description',  1, 'Replique longue type AR-15' )
+
+#ar15.Read()
+
+#ar15.Delete(1)
