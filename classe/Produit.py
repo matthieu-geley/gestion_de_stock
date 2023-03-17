@@ -9,9 +9,9 @@ class CRUDproduit:
 			database="boutique"
 		)
 
-	def Create(self, nom, description, prix, quantite, id_categorie):
+	def Create(self, nom, desc, prix, qty, cat):
 		cur = self.datab.cursor()
-		cur.execute(f"INSERT INTO produit (nom, description, prix, quantite, id_categorie) values ('{nom}', '{description}', {prix}, {quantite}, {id_categorie});")
+		cur.execute(f"INSERT INTO produit (nom, description, prix, quantite, id_categorie) values ('{nom}', '{desc}', {prix}, {qty}, {cat});")
 		self.datab.commit()
 		cur.close()
 
