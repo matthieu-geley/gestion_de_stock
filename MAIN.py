@@ -13,7 +13,7 @@ from tkinter.messagebox import showinfo
 datab= mysql.connector.connect(
 	host="localhost",
 	user="root",
-	password="root",
+	password="R00t",
 	database="boutique"
 	)
 
@@ -60,7 +60,7 @@ def ajouterProd():
 	datab = mysql.connector.connect(
 		host="localhost",
 		user="root",
-		password="root",
+		password="R00t",
 		database="boutique"
 	)
 	nom = addnom.get()
@@ -70,7 +70,7 @@ def ajouterProd():
 	cat = addid_cat.get()
 
 	cur = datab.cursor()
-	cur.execute(f"INSERT INTO produit (nom, description, prix, quantite, id_categorie) values ('{nom}', '{desc}', {prix}, {qty}, {cat});")
+	cur.execute(f"INSERT INTO produit (nom, description, prix, quantité, id_categorie) values ('{nom}', '{desc}', {prix}, {qty}, {cat});")
 	datab.commit()
 	cur.close()
 
@@ -84,11 +84,35 @@ delID.insert(0, "ID à modifier ou supprimer")
 delID.grid(row=3, column=2, pady=5, padx=10)
 
 
+def displayDATA():
+	datab = mysql.connector.connect(
+		host="localhost",
+		user="root",
+		password="R00t",
+		database="boutique"
+	)
+	cur = datab.cursor()
+
+	req = f"""select produit.id, produit.nom, description, prix, quantité, categorie.nom \
+            from produit inner join categorie on produit.id_categorie = categorie.id;"""
+
+	# execution de ma requête
+	cur.execute(req)
+
+	rows = cur.fetchall()
+
+	itemList = []
+	for row in rows:
+		itemList.append(row)
+
+	return itemList
+
+
 def enleverProd():
 	datab = mysql.connector.connect(
 		host="localhost",
 		user="root",
-		password="root",
+		password="R00t",
 		database="boutique"
 	)
 
@@ -125,7 +149,7 @@ def alterProd():
 	datab = mysql.connector.connect(
 		host="localhost",
 		user="root",
-		password="root",
+		password="R00t",
 		database="boutique"
 	)
 
@@ -155,8 +179,6 @@ bouton_modifier = Button(win, text = "Modifier un produit du stock.", command = 
 
 def afficherStock():
 
-
-
 	Stock = Toplevel()
 	Stock.title('Affichage du Stock')
 	Stock.configure(bg =  "grey")
@@ -167,30 +189,30 @@ def afficherStock():
 	Stock.geometry('1300x300')
 	curs = datab.cursor()
 
-	colone = ('ID', 'Nom', 'Description', 'Prix', 'Quantite', 'Categorie')
+	colone = ('id', 'nom', 'description', 'prix', 'quantité', 'id_categorie')
 
 	tableur = ttk.Treeview(Stock, columns=colone, show='headings')
 
-	tableur.heading('ID', text='ID')
-	tableur.heading('Nom', text='Nom')
-	tableur.heading('Description', text='Description')
-	tableur.heading('Prix', text='Prix')
-	tableur.heading('Quantite', text='Quantité')
-	tableur.heading('Categorie', text='Catégorie')
+	tableur.heading('id', text='ID')
+	tableur.heading('nom', text='Nom')
+	tableur.heading('description', text='Description')
+	tableur.heading('prix', text='Prix')
+	tableur.heading('quantité', text='Quantité')
+	tableur.heading('id_categorie', text='Catégorie')
 
-	curs.execute("SELECT * FROM produit")
-	for produit in curs:
+	produits = displayDATA()
+	for produit in produits:
 		tableur.insert('',END, values=produit)
 
 	tableur.grid(row=0, column=0, sticky='nsew')
-	tableur.column(col, anchor=CENTER)
 
 	scrollbar = ttk.Scrollbar(Stock, orient=VERTICAL, command=tableur.yview)
 	tableur.configure(yscroll=scrollbar.set)
 	scrollbar.grid(row=0, column=1, sticky='ns')
 
 	Stock.mainloop()
-	curs.close()
+	#curs.close()
+
 
 stock_afficher = Button(win, text= "Afficher le stock.", command=afficherStock).grid(row= 8, column=2, pady=50, padx=15)
 
